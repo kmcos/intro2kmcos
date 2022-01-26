@@ -1,4 +1,4 @@
-from kmos.run import KMC_Model
+from kmcos.run import KMC_Model
 import numpy as np
 import matplotlib.pyplot as plt
 

@@ -9,7 +9,7 @@ June 2016
 """
 import numpy as np
 
-from kmos.run import KMC_Model
+from kmcos.run import KMC_Model
 model = KMC_Model(banner = False)
 
 model.parameters.T = 600.

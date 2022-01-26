@@ -1,6 +1,6 @@
 """Visualize the growth of a run of the SOS model"""
 import sys, os
-from kmos.run import KMC_Model
+from kmcos.run import KMC_Model
 from ase.visualize import view
 
 config = os.path.splitext(sys.argv[1])[0]

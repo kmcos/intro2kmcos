@@ -12,13 +12,13 @@ try:
     with open('ScanKinetics.dat') as infile:
         lines = infile.readlines()
 except:
-    print('ScanKinetics.dat is missing!'); import sys;sys.exit()
+    print 'no data file created!'
 
 iT = 0; iTOF = 3 # columns for each variable
 results = []
-for thisline in lines:
-    if thisline[0] != '#':
-        values = thisline.strip().split(' ')
+for line in lines:
+    if line[0] != '#':
+        values = line.strip().split(' ')
         info = {'T_inv':1/float(values[iT]), 'TOF':float(values[iTOF])}
         results.append(info)
 

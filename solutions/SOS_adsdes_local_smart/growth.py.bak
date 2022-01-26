@@ -1,4 +1,4 @@
-from kmcos.run import KMC_Model
+from kmos.run import KMC_Model
 import random
 
 Ts = [350, 450]
@@ -25,9 +25,9 @@ for i,T in enumerate(Ts):
     outname = '_'.join(['config', 'T{}'.format(T)] +
                        ['{}'.format(d) for d in model.size])
     model.dump_config(outname)
-    print(('Finished with T={}K'.format(T)))
-    print(('Deposited {}ML in {} s'.format(
+    print('Finished with T={}K'.format(T))
+    print('Deposited {}ML in {} s'.format(
         ML,
-        model.base.get_kmc_time())))
+        model.base.get_kmc_time()))
 
     model.deallocate()

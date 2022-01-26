@@ -1,15 +1,19 @@
 model_name = 'LGD_lateral'
-simulation_size = 20
+simulation_size = (50, 20)
 random_seed = 1
+
 
 def setup_model(model):
     """Write initialization steps here.
        e.g. ::
     model.put([0,0,0,model.lattice.default_a], model.proclist.species_a)
     """
-    #from setup_model import setup_model
-    #setup_model(model)
-    pass
+    x, y = model.size
+
+    for i in xrange(y):
+        model._put([x-1, i, 0, 1], model.proclist.drain)
+        model._put([0, i, 0, 1], model.proclist.source)
+    model._adjust_database()
 
 # Default history length in graph
 hist_length = 30
@@ -131,9 +135,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_bottom_0_source" rate_constant="1/(beta*h)*exp(-beta*((E0)-0*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -149,9 +151,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_bottom_1_source" rate_constant="1/(beta*h)*exp(-beta*((E0)-1*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -185,9 +185,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_bottom_4_source" rate_constant="1/(beta*h)*exp(-beta*((E0)-1*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -203,9 +201,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_bottom_5_source" rate_constant="1/(beta*h)*exp(-beta*((E0)-2*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -311,9 +307,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_right_0_source" rate_constant="1/(beta*h)*exp(-beta*((E0-eps_f)-0*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -329,9 +323,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_right_1_source" rate_constant="1/(beta*h)*exp(-beta*((E0-eps_f)-1*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -365,9 +357,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_right_4_source" rate_constant="1/(beta*h)*exp(-beta*((E0-eps_f)-1*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -383,9 +373,7 @@ xml = """<?xml version="1.0" ?>
         <process enabled="True" name="diffusion_right_5_source" rate_constant="1/(beta*h)*exp(-beta*((E0-eps_f)-2*e_int)*eV)">
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -420,8 +408,6 @@ xml = """<?xml version="1.0" ?>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -438,8 +424,6 @@ xml = """<?xml version="1.0" ?>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="empty"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -456,8 +440,6 @@ xml = """<?xml version="1.0" ?>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="empty"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -474,8 +456,6 @@ xml = """<?xml version="1.0" ?>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="ion"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="empty"/>
             <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="-1 0 0" species="source"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 -1 0" species="ion"/>
-            <condition coord_layer="simple_cubic" coord_name="hollow" coord_offset="1 0 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 1 0" species="ion"/>
             <action coord_layer="simple_cubic" coord_name="hollow" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -543,11 +523,3 @@ xml = """<?xml version="1.0" ?>
     <output_list/>
 </kmc>
 """
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) == 1:
-        from kmcos import cli
-        cli.main("benchmark")
-    if len(sys.argv) == 2:
-        from kmcos import cli
-        cli.main(sys.argv[1])
