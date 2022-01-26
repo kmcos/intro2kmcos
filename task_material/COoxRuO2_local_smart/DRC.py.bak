@@ -47,7 +47,7 @@ for cov,label in zip(guess_coverages,cov_labels):
         occupations[site].append((ads,Nsites))
 
 #populate the lattice
-for key, value in occupations.items():
+for key, value in occupations.iteritems():
     available_sites = sites_list[:]
     for ads,Nsites in value:
         site = kmos_sites[key]

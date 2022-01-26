@@ -50,14 +50,14 @@ rate_constants = {
     "COdiff_cus_left":("(beta*h)**(-1)*exp(-beta*(E_COdiff_bridge_cus)*eV)", True),
     "COdiff_cus_right":("(beta*h)**(-1)*exp(-beta*(E_COdiff_cus_bridge)*eV)", True),
     "COdiff_cus_up":("(beta*h)**(-1)*exp(-beta*(E_COdiff_cus_cus)*eV)", True),
-    "O2_adsorption_bridge_right":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)", True),
-    "O2_adsorption_bridge_up":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)", True),
-    "O2_adsorption_cus_right":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)", True),
-    "O2_adsorption_cus_up":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)", True),
-    "O2_desorption_bridge_right":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)", True),
-    "O2_desorption_bridge_up":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)", True),
-    "O2_desorption_cus_right":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)", True),
-    "O2_desorption_cus_up":("p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)", True),
+    "O2_adsorption_bridge_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
+    "O2_adsorption_bridge_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
+    "O2_adsorption_cus_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
+    "O2_adsorption_cus_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
+    "O2_desorption_bridge_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)", True),
+    "O2_desorption_bridge_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)", True),
+    "O2_desorption_cus_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)", True),
+    "O2_desorption_cus_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)", True),
     "Odiff_bridge_down":("(beta*h)**(-1)*exp(-beta*(E_Odiff_bridge_bridge)*eV)", True),
     "Odiff_bridge_left":("(beta*h)**(-1)*exp(-beta*(E_Odiff_cus_bridge)*eV)", True),
     "Odiff_bridge_right":("(beta*h)**(-1)*exp(-beta*(E_Odiff_bridge_cus)*eV)", True),
@@ -84,13 +84,9 @@ representations = {
     }
 
 lattice_representation = """[Atoms(symbols='N2Ru2',
-          pbc=np.array([False, False, False], dtype=bool),
-          cell=np.array(
-      [[  6.43,   0.  ,   0.  ],
-       [  0.  ,   3.12,   0.  ],
-       [  0.  ,   0.  ,  20.  ]]),
-          scaled_positions=np.array(
-      [[0.6898882, 0.0, 0.6390143], [0.3039135, 0.0, 0.6390143], [0.0, 0.0, 0.6390143], [0.4969008, 0.4994377, 0.6390143]]),
+          pbc=np.array([False, False, False]),
+          cell=np.array(      ([6.43, 3.12, 20.0])),
+          scaled_positions=np.array(      [[0.6898882, 0.0, 0.6390143], [0.3039135, 0.0, 0.6390143], [0.0, 0.0, 0.6390143], [0.4969008, 0.4994377, 0.6390143]]),
 ),]"""
 
 species_tags = {
@@ -141,13 +137,9 @@ xml = """<?xml version="1.0" ?>
         <parameter adjustable="True" max="100.0" min="1e-15" name="p_O2gas" scale="log" value="1"/>
     </parameter_list>
     <lattice cell_size="6.43 0.0 0.0 0.0 3.12 0.0 0.0 0.0 20.0" default_layer="ruo2" representation="[Atoms(symbols='N2Ru2',
-          pbc=np.array([False, False, False], dtype=bool),
-          cell=np.array(
-      [[  6.43,   0.  ,   0.  ],
-       [  0.  ,   3.12,   0.  ],
-       [  0.  ,   0.  ,  20.  ]]),
-          scaled_positions=np.array(
-      [[0.6898882, 0.0, 0.6390143], [0.3039135, 0.0, 0.6390143], [0.0, 0.0, 0.6390143], [0.4969008, 0.4994377, 0.6390143]]),
+          pbc=np.array([False, False, False]),
+          cell=np.array(      ([6.43, 3.12, 20.0])),
+          scaled_positions=np.array(      [[0.6898882, 0.0, 0.6390143], [0.3039135, 0.0, 0.6390143], [0.0, 0.0, 0.6390143], [0.4969008, 0.4994377, 0.6390143]]),
 ),]" substrate_layer="ruo2">
         <layer color="#ffffff" name="ruo2">
             <site default_species="default_species" pos="0.0 0.5 0.7" tags="" type="bridge"/>
@@ -219,49 +211,49 @@ xml = """<?xml version="1.0" ?>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="CO"/>
         </process>
-        <process enabled="True" name="O2_adsorption_bridge_right" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)">
+        <process enabled="True" name="O2_adsorption_bridge_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
         </process>
-        <process enabled="True" name="O2_adsorption_bridge_up" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)">
+        <process enabled="True" name="O2_adsorption_bridge_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="O"/>
         </process>
-        <process enabled="True" name="O2_adsorption_cus_right" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)">
+        <process enabled="True" name="O2_adsorption_cus_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="O"/>
         </process>
-        <process enabled="True" name="O2_adsorption_cus_up" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)">
+        <process enabled="True" name="O2_adsorption_cus_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="O"/>
         </process>
-        <process enabled="True" name="O2_desorption_bridge_right" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_bridge_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_bridge_up" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_bridge_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_cus_right" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_cus_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_cus_up" rate_constant="p_O2gas*bar*A/sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_cus_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
@@ -367,3 +359,11 @@ xml = """<?xml version="1.0" ?>
     <output_list/>
 </kmc>
 """
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) == 1:
+        from kmcos import cli
+        cli.main("benchmark")
+    if len(sys.argv) == 2:
+        from kmcos import cli
+        cli.main(sys.argv[1])

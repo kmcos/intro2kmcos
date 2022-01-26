@@ -1,6 +1,6 @@
 """
 Generate and Arrhenius plot
-using kmcos
+using kmos
 
 Juan M. Lorenzi
 TU Munich
@@ -9,7 +9,7 @@ June 2016
 import math
 
 from kmcos.run import KMC_Model
-model = KMC_Model(banner = False) #need xml file
+model = KMC_Model(banner = False)
 
 model.parameters.p_COgas = 2.e-1
 model.parameters.p_O2gas = 1.e-1
