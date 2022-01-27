@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from kmos.run import KMC_Model
+from kmcos.run import KMC_Model
 import pylab
 import numpy as np
 
@@ -55,7 +55,7 @@ ax = fig.add_subplot(2,1,1)
 for i in range(len(tof_labels)):
     ax.plot(steps, tofs[:,i], color=colors[i], label='CO2')
 ax.set_xlabel('kmc steps')
-ax.set_ylabel(ur'TOF (s$^{-1}$site$^{-1}$)')
+ax.set_ylabel(r'TOF (s$^{-1}$site$^{-1}$)')
 #pylab.ylim([0,5])
 box = ax.get_position()
 ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
