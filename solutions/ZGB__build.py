@@ -10,11 +10,14 @@ import kmcos
 # First kmcos.types
 from kmcos.types import *
 
+model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
+model_name = model_name.replace("__build", "")
+
 # Initialize the project
-pt = Project()
+kmc_model = create_kmc_model()
 
 # Set projects metadata
-pt.set_meta( author = 'Juan M. Lorenzi',
+kmc_model.set_meta( author = 'Juan M. Lorenzi',
              email = 'jmlorenzi@gmail.com',
              model_name = 'O2_adsdes',
              model_dimension = 2)
@@ -24,46 +27,46 @@ layer = Layer(name = 'fcc100')                 # define a layer
 site = Site(name = 'hol', pos = '0.5 0.5 0.5') # define a site
 layer.sites.append(site)                       # add site to layer
 # Add layer to Project
-pt.add_layer(layer)
+kmc_model.add_layer(layer)
 
 # Define the surface species
-pt.add_species(name = 'empty', color='#dddddd')
+kmc_model.add_species(name = 'empty', color='#dddddd')
 
-pt.add_species(name = 'O', color = '#ff0000',
+kmc_model.add_species(name = 'O', color = '#ff0000',
                representation = "Atoms('O',[[0.,0.,0.]])",
                )
 
-pt.add_species(name = 'CO', color = '#0000ff',
+kmc_model.add_species(name = 'CO', color = '#0000ff',
                representation = "Atoms('N',[[0.,0.,0.]])",
                )
 
 # Model parameters
-pt.add_parameter(name = 'yCO', value = 0.5,
+kmc_model.add_parameter(name = 'yCO', value = 0.5,
                  adjustable = True, min = 0.0, max = 1.0)
 
-pt.add_parameter(name = 'kfast', value = 1e10, # "Infinite" reaction rate
+kmc_model.add_parameter(name = 'kfast', value = 1e10, # "Infinite" reaction rate
                  adjustable = False)
 
-pt.add_parameter(name = 'kslow', value = 1e-10, # "Zero" desorption rate
+kmc_model.add_parameter(name = 'kslow', value = 1e-10, # "Zero" desorption rate
                  adjustable = False)
 
 
 # Define Processes
 #   Generate auxiliary coordinates
-center = pt.lattice.generate_coord('hol')
-right = pt.lattice.generate_coord('hol.(1,0,0)')
-up = pt.lattice.generate_coord('hol.(0,1,0)')
-left = pt.lattice.generate_coord('hol.(-1,0,0)')
-down = pt.lattice.generate_coord('hol.(0,-1,0)')
+center = kmc_model.lattice.generate_coord('hol')
+right = kmc_model.lattice.generate_coord('hol.(1,0,0)')
+up = kmc_model.lattice.generate_coord('hol.(0,1,0)')
+left = kmc_model.lattice.generate_coord('hol.(-1,0,0)')
+down = kmc_model.lattice.generate_coord('hol.(0,-1,0)')
 
 
 # Define single site processes
-pt.add_process(name = 'CO_ads',
+kmc_model.add_process(name = 'CO_ads',
                conditions = [Condition(coord=center,species='empty'),],
                actions = [Action(coord=center,species='CO')],
                rate_constant = 'yCO')
 
-pt.add_process(name = 'CO_des',
+kmc_model.add_process(name = 'CO_des',
                conditions = [Condition(coord=center,species='CO'),],
                actions = [Action(coord=center,species='empty')],
                rate_constant = 'kslow')
@@ -77,12 +80,12 @@ for i, coord in enumerate([right, up]):
     ads_acts  = [Action(coord=center, species='O'),
                  Action(coord=coord, species='O')]
     # O2 adsorption
-    pt.add_process(name = 'O2_ads_{:02d}'.format(i),
+    kmc_model.add_process(name = 'O2_ads_{:02d}'.format(i),
                    conditions = ads_conds,
                    actions = ads_acts,
                    rate_constant = '0.5*(1-yCO)')
     # O2 desorption
-    pt.add_process(name = 'O2_des_{:02d}'.format(i),
+    kmc_model.add_process(name = 'O2_des_{:02d}'.format(i),
                    conditions = ads_acts,
                    actions = ads_conds,
                    rate_constant = 'kslow')
@@ -95,13 +98,17 @@ for i, coord in enumerate([right, up, left, down]):
                  Action(coord=coord, species='empty')]
 
     # O2 adsorption
-    pt.add_process(name = 'CO_oxi_{:02d}'.format(i),
+    kmc_model.add_process(name = 'CO_oxi_{:02d}'.format(i),
                    conditions = ads_conds,
                    actions = ads_acts,
                    rate_constant = 'kfast',
                    tof_count = {'CO_oxidation' : 1})
 
 # Save the model to an xml file
-pt.save('ZGB.xml')
-pt.backend = 'local_smart'
-kmcos.export('ZGB.xml' + ' -b' + pt.backend)
+###It's good to simply copy and paste the below lines between model creation files.
+kmc_model.filename = model_name + ".xml"
+kmc_model.print_statistics()
+kmc_model.backend = 'local_smart' #specifying is optional. local_smart is the dfault. Currently, the other options are 'lat_int' and 'otf'
+kmc_model.clear_model(model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model before exporting the new one. It is convenent to always include this line because then you don't need to 'confirm' removing the old model.
+kmc_model.save_model()
+kmcos.export(kmc_model.filename + ' -b ' + kmc_model.backend) #alternatively, one can use: kmcos.cli.main('export '+  kmc_model.filename + ' -b' + kmc_model.backend)

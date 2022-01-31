@@ -587,17 +587,6 @@ subroutine touchup_default_a(site)
         call del_proc(diffusion_up, site)
     endif
     select case(get_species(site))
-    case(empty)
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(ion)
-            call add_proc(diffusion_down, site)
-        end select
-
-        select case(get_species(site + (/1, 0, 0, 0/)))
-        case(ion)
-            call add_proc(diffusion_left, site)
-        end select
-
     case(ion)
         select case(get_species(site + (/1, 0, 0, 0/)))
         case(empty)
@@ -607,6 +596,17 @@ subroutine touchup_default_a(site)
         select case(get_species(site + (/0, 1, 0, 0/)))
         case(empty)
             call add_proc(diffusion_up, site)
+        end select
+
+    case(empty)
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(ion)
+            call add_proc(diffusion_down, site)
+        end select
+
+        select case(get_species(site + (/1, 0, 0, 0/)))
+        case(ion)
+            call add_proc(diffusion_left, site)
         end select
 
     end select

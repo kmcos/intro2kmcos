@@ -1,5 +1,5 @@
 """
-Demonstration of a kmcos render script.
+Demonstration of a kmcos render scrikmc_model.
 Generates a simple model for simulating
 dissociative adsorption / associative desorption
 of O2 on a FCC(100) (square) lattice

@@ -1,5 +1,5 @@
 """
-Demonstration of a kmos render script.
+Demonstration of a kmos render scrikmc_model.
 Generates a simple model for simulating
 dissociative adsorption / associative desorption
 of O2 on a FCC(100) (square) lattice
@@ -13,11 +13,14 @@ import kmcos
 # First kmcos.types
 from kmcos.types import *
 
+model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
+model_name = model_name.replace("_finished__build", "")
+
 # Initialize the project
-pt = Project()
+kmc_model = create_kmc_model()
 
 # Set projects metadata
-pt.set_meta( author = 'Juan M. Lorenzi',
+kmc_model.set_meta( author = 'Juan M. Lorenzi',
              email = 'jmlorenzi@gmail.com',
              model_name = 'O2_adsdes',
              model_dimension = 2)
@@ -27,28 +30,28 @@ layer = Layer(name = 'fcc100')                 # define a layer
 site = Site(name = 'hol', pos = '0.5 0.5 0.5') # define a site
 layer.sites.append(site)                       # add site to layer
 # Add layer to Project
-pt.add_layer(layer)
+kmc_model.add_layer(layer)
 
 # Define the surface species
-pt.add_species(name = 'empty', color='#dddddd')
+kmc_model.add_species(name = 'empty', color='#dddddd')
 
-pt.add_species(name = 'O', color = '#ff0000',
+kmc_model.add_species(name = 'O', color = '#ff0000',
                representation = "Atoms('O',[[0.,0.,0.]])",
                )
 
 # Define model parameters.. pO2 and E_over_kT
-pt.add_parameter(name='kads', value = 1.0)
-pt.add_parameter(name='kdes', value=1.0,
+kmc_model.add_parameter(name='kads', value = 1.0)
+kmc_model.add_parameter(name='kdes', value=1.0,
                  adjustable=True, min=1e-2, max=1e2, scale='log')
 
 # Define Processes
 #   Generate auxiliary coordinates
-center = pt.lattice.generate_coord('hol')
-right = pt.lattice.generate_coord('hol.(1,0,0)')
-up = pt.lattice.generate_coord('hol.(0,1,0)')
+center = kmc_model.lattice.generate_coord('hol')
+right = kmc_model.lattice.generate_coord('hol.(1,0,0)')
+up = kmc_model.lattice.generate_coord('hol.(0,1,0)')
 
 #   Define both adsorption processes
-pt.add_process(name = 'O2_ads_right',
+kmc_model.add_process(name = 'O2_ads_right',
                conditions = [Condition(coord=center, species='empty'),
                              Condition(coord=right, species='empty'),],
                actions = [Action(coord=center, species='O'),
@@ -56,7 +59,7 @@ pt.add_process(name = 'O2_ads_right',
                rate_constant = '0.5*kads',
                )
 
-pt.add_process(name = 'O2_ads_up',
+kmc_model.add_process(name = 'O2_ads_up',
                conditions = [Condition(coord=center, species='empty'),
                              Condition(coord=up, species='empty'),],
                actions = [Action(coord=center, species='O'),
@@ -65,7 +68,7 @@ pt.add_process(name = 'O2_ads_up',
                )
 
 #   Define both desorption processes
-pt.add_process(name = 'O2_des_right',
+kmc_model.add_process(name = 'O2_des_right',
                conditions = [Condition(coord=center, species='O'),
                              Condition(coord=right, species='O'),],
                actions = [Action(coord=center, species='empty'),
@@ -73,7 +76,7 @@ pt.add_process(name = 'O2_des_right',
                rate_constant = '0.5*kdes',
                )
 
-pt.add_process(name = 'O2_des_up',
+kmc_model.add_process(name = 'O2_des_up',
                conditions = [Condition(coord=center, species='O'),
                              Condition(coord=up, species='O'),],
                actions = [Action(coord=center, species='empty'),
@@ -88,18 +91,22 @@ pt.add_process(name = 'O2_des_up',
 #     ads_acts  = [Action(coord=center, species='O'),
 #                  Action(coord=coord, species='O')]
 #     # Adsorption
-#     pt.add_process(name = 'O2_ads_{:02d}'.format(i),
+#     kmc_model.add_process(name = 'O2_ads_{:02d}'.format(i),
 #                    conditions = ads_conds,
 #                    actions = ads_acts,
 #                    rate_constant = '0.5*kads')
 #     # Desorption
-#     pt.add_process(name = 'O2_des_{:02d}'.format(i),
+#     kmc_model.add_process(name = 'O2_des_{:02d}'.format(i),
 #                    conditions = ads_acts,
 #                    actions = ads_conds,
 #                    rate_constant = '0.5*kdes')
 
 
 # Save the model to an xml file
-pt.save('O2adsdes.xml')
-pt.backend = 'local_smart' #specifying is optional. local_smart is the dfault. Currently, the other options are 'lat_int' and 'otf'
-kmcos.export('O2adsdes.xml' + ' -b' + pt.backend)
+###It's good to simply copy and paste the below lines between model creation files.
+kmc_model.filename = model_name + ".xml"
+kmc_model.print_statistics()
+kmc_model.backend = 'local_smart' #specifying is optional. local_smart is the dfault. Currently, the other options are 'lat_int' and 'otf'
+kmc_model.clear_model(model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model before exporting the new one. It is convenent to always include this line because then you don't need to 'confirm' removing the old model.
+kmc_model.save_model()
+kmcos.export(kmc_model.filename + ' -b ' + kmc_model.backend) #alternatively, one can use: kmcos.cli.main('export '+  kmc_model.filename + ' -b' + kmc_model.backend)

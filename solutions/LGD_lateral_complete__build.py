@@ -2,12 +2,14 @@ from itertools import product
 
 import kmcos
 from kmcos.cli import main as cli_main
-from kmcos.types import Action, Condition, Layer, Project, Site, Species
+from kmcos.types import Action, Condition, Layer, Site, Species, create_kmc_model
 
 
+model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
+model_name = model_name.replace("_complete__build", "")
 # Project
-pt = Project()
-pt.set_meta(
+kmc_model = create_kmc_model()
+kmc_model.set_meta(
     author='Michael Seibt',
     email='michael.seibt@tum.de',
     model_name='LGD_lateral',
@@ -15,32 +17,32 @@ pt.set_meta(
 )
 
 # Species
-pt.add_species(
+kmc_model.add_species(
     Species(name='empty', color='#d3d3d3'),
     Species(name='ion', color='#0000ff', representation="Atoms('Si')"),
     Species(name='source', color='#00ff00', representation="Atoms('Au')"),
     Species(name='drain', color='#ff0000', representation="Atoms('Ag')")
 )
-pt.species_list.default_species = 'empty'
+kmc_model.species_list.default_species = 'empty'
 
 # Layer and Coordinates
 layer = Layer(name='simple_cubic')
 layer.add_site(Site(name='hollow', pos='0.5 0.5 0.5'))
-pt.add_layer(layer)
+kmc_model.add_layer(layer)
 
-center = pt.lattice.generate_coord('hollow')
-bottom = pt.lattice.generate_coord('hollow.(0,-1,0)')
-top = pt.lattice.generate_coord('hollow.(0,+1,0)')
-left = pt.lattice.generate_coord('hollow.(-1,0,0)')
-right = pt.lattice.generate_coord('hollow.(+1,0,0)')
+center = kmc_model.lattice.generate_coord('hollow')
+bottom = kmc_model.lattice.generate_coord('hollow.(0,-1,0)')
+top = kmc_model.lattice.generate_coord('hollow.(0,+1,0)')
+left = kmc_model.lattice.generate_coord('hollow.(-1,0,0)')
+right = kmc_model.lattice.generate_coord('hollow.(+1,0,0)')
 
 # Parameters
-pt.add_parameter(name='E0', value=0.5)
-pt.add_parameter(name='T', value=300)
-pt.add_parameter(name='eps_f', value=0.0, adjustable=True, min=-0.05, max=0.05)
-pt.add_parameter(name='e_int', value=0.002, adjustable=True, min=0.00, max=0.01)
-pt.add_parameter(name='thetaS', value=1.0, adjustable=True, min=0.0, max=1.0)
-pt.add_parameter(name='thetaD', value=0.0, adjustable=True, min=0.0, max=1.0)
+kmc_model.add_parameter(name='E0', value=0.5)
+kmc_model.add_parameter(name='T', value=300)
+kmc_model.add_parameter(name='eps_f', value=0.0, adjustable=True, min=-0.05, max=0.05)
+kmc_model.add_parameter(name='e_int', value=0.002, adjustable=True, min=0.00, max=0.01)
+kmc_model.add_parameter(name='thetaS', value=1.0, adjustable=True, min=0.0, max=1.0)
+kmc_model.add_parameter(name='thetaD', value=0.0, adjustable=True, min=0.0, max=1.0)
 
 # Processes
 names = ['top', 'left', 'bottom', 'right']
@@ -62,7 +64,7 @@ for coordinate_name, delta_E, coordinate in zip(names, delta_Es, coordinates):
             diffusion_condition.append(Condition(species=conf_species, coord=temp_coord))
 
         nns = conf.count('ion')
-        pt.add_process(
+        kmc_model.add_process(
             name='diffusion_%s_%s' % (coordinate_name, i),
             conditions=diffusion_condition,
             actions=diffusion_action,
@@ -83,7 +85,7 @@ for coordinate_name, delta_E, coordinate in zip(names, delta_Es, coordinates):
                         conf_species = 'source'
                     diffusion_condition.append(Condition(species=conf_species, coord=temp_coord))
 
-                pt.add_process(
+                kmc_model.add_process(
                     name='diffusion_%s_%s_source' % (coordinate_name, i),
                     conditions=diffusion_condition,
                     actions=diffusion_action,
@@ -98,13 +100,13 @@ source_exit_conditions = [
     Condition(species='ion', coord=center),
     Condition(species='source', coord=left)
 ]
-pt.add_process(
+kmc_model.add_process(
     name='source_entry',
     conditions=source_entry_conditions,
     actions=source_exit_conditions,
     rate_constant='thetaS*1/(beta*h)*exp(-beta*(E0-eps_f)*eV)'
 )
-pt.add_process(
+kmc_model.add_process(
     name='source_exit',
     conditions=source_exit_conditions,
     actions=source_entry_conditions,
@@ -119,7 +121,7 @@ drain_exit_conditions = [
     Action(species='empty', coord=center),
     Action(species='drain', coord=right)
 ]
-pt.add_process(
+kmc_model.add_process(
     name='drain_exit',
     conditions=drain_entry_conditions,
     actions=drain_exit_conditions,
@@ -127,7 +129,7 @@ pt.add_process(
     tof_count={'current': 1}
 )
 
-pt.add_process(
+kmc_model.add_process(
     name='drain_entry',
     conditions=drain_exit_conditions,
     actions=drain_entry_conditions,
@@ -136,10 +138,10 @@ pt.add_process(
 )
 
 # Build model
-file_name = pt.meta.model_name + '.xml'
-pt.save(file_name)
+file_name = kmc_model.meta.model_name + '.xml'
+kmc_model.save(file_name)
 if False:  # build the exported .xml directly
     cli_main('export %s' % file_name)
-pt.print_statistics()
-pt.backend = 'local_smart'
-kmcos.export(file_name + ' b' + pt.backend)
+kmc_model.print_statistics()
+kmc_model.backend = 'local_smart'
+kmcos.export(file_name + ' b' + kmc_model.backend)
