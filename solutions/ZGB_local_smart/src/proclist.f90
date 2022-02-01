@@ -769,18 +769,6 @@ subroutine touchup_fcc100_hol(site)
         call del_proc(O2_des_01, site)
     endif
     select case(get_species(site))
-    case(empty)
-        call add_proc(CO_ads, site)
-        select case(get_species(site + (/1, 0, 0, 0/)))
-        case(empty)
-            call add_proc(O2_ads_00, site)
-        end select
-
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(empty)
-            call add_proc(O2_ads_01, site)
-        end select
-
     case(O)
         select case(get_species(site + (/1, 0, 0, 0/)))
         case(O)
@@ -806,6 +794,18 @@ subroutine touchup_fcc100_hol(site)
         select case(get_species(site + (/0, 1, 0, 0/)))
         case(O)
             call add_proc(CO_oxi_01, site)
+        end select
+
+    case(empty)
+        call add_proc(CO_ads, site)
+        select case(get_species(site + (/1, 0, 0, 0/)))
+        case(empty)
+            call add_proc(O2_ads_00, site)
+        end select
+
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(empty)
+            call add_proc(O2_ads_01, site)
         end select
 
     end select

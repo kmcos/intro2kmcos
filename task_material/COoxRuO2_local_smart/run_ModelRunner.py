@@ -13,4 +13,6 @@ class ScanKinetics(ModelRunner):
     p_O2gas = PressureParameter(1.e-1)
     T = TemperatureParameter(min=450, max=650, steps=20)
     p_COgas = PressureParameter(2.e-1)
-ScanKinetics().run(init_steps=1e7, sample_steps=1e7, cores=4)
+
+if __name__ == "__main__":
+    ScanKinetics().run(init_steps=1e7, sample_steps=1e7, cores=4)

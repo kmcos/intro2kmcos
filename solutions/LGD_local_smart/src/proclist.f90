@@ -526,10 +526,10 @@ subroutine put_drain_default_a(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(empty)
-        call add_proc(drain_entry, site + (/-1, 0, 0, 0/))
     case(ion)
         call add_proc(drain_exit, site + (/-1, 0, 0, 0/))
+    case(empty)
+        call add_proc(drain_entry, site + (/-1, 0, 0, 0/))
     end select
 
 
@@ -560,10 +560,10 @@ subroutine take_drain_default_a(site)
     end select
 
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(ion)
-        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     case(source)
         call add_proc(source_entry, site + (/-1, 0, 0, 0/))
+    case(ion)
+        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     end select
 
     select case(get_species(site + (/0, 1, 0, 0/)))
@@ -613,10 +613,10 @@ subroutine put_ion_default_a(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(empty)
-        call add_proc(diffusion_left, site + (/-1, 0, 0, 0/))
     case(source)
         call add_proc(source_exit, site + (/-1, 0, 0, 0/))
+    case(empty)
+        call add_proc(diffusion_left, site + (/-1, 0, 0, 0/))
     end select
 
     select case(get_species(site + (/1, 0, 0, 0/)))
@@ -680,10 +680,10 @@ subroutine take_ion_default_a(site)
     end select
 
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(ion)
-        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     case(source)
         call add_proc(source_entry, site + (/-1, 0, 0, 0/))
+    case(ion)
+        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     end select
 
     select case(get_species(site + (/0, 1, 0, 0/)))
@@ -733,10 +733,10 @@ subroutine put_source_default_a(site)
 
     ! enable affected processes
     select case(get_species(site + (/1, 0, 0, 0/)))
-    case(empty)
-        call add_proc(source_entry, site)
     case(ion)
         call add_proc(source_exit, site)
+    case(empty)
+        call add_proc(source_entry, site)
     end select
 
 
@@ -767,10 +767,10 @@ subroutine take_source_default_a(site)
     end select
 
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(ion)
-        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     case(source)
         call add_proc(source_entry, site + (/-1, 0, 0, 0/))
+    case(ion)
+        call add_proc(diffusion_right, site + (/-1, 0, 0, 0/))
     end select
 
     select case(get_species(site + (/0, 1, 0, 0/)))
@@ -815,17 +815,12 @@ subroutine touchup_default_a(site)
         call del_proc(source_exit, site)
     endif
     select case(get_species(site))
-    case(empty)
+    case(source)
         select case(get_species(site + (/1, 0, 0, 0/)))
         case(ion)
-            call add_proc(diffusion_left, site)
-        case(drain)
-            call add_proc(drain_entry, site)
-        end select
-
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(ion)
-            call add_proc(diffusion_down, site)
+            call add_proc(source_exit, site)
+        case(empty)
+            call add_proc(source_entry, site)
         end select
 
     case(ion)
@@ -841,12 +836,17 @@ subroutine touchup_default_a(site)
             call add_proc(diffusion_up, site)
         end select
 
-    case(source)
+    case(empty)
         select case(get_species(site + (/1, 0, 0, 0/)))
-        case(empty)
-            call add_proc(source_entry, site)
         case(ion)
-            call add_proc(source_exit, site)
+            call add_proc(diffusion_left, site)
+        case(drain)
+            call add_proc(drain_entry, site)
+        end select
+
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(ion)
+            call add_proc(diffusion_down, site)
         end select
 
     end select
