@@ -7,7 +7,7 @@ import numpy as np
 model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
 model_name = model_name.replace("__build", "")
 
-kmc_model = create_kmc_model()
+kmc_model = create_kmc_model(model_name)
 
 kmc_model.set_meta(author='Mie Andersen',
             email='mie.andersen@ch.tum.de',
@@ -356,9 +356,7 @@ kmc_model.add_process(name='React_bridge_left',
 
 # Save the model to an xml file
 ###It's good to simply copy and paste the below lines between model creation files.
-kmc_model.filename = model_name + ".xml"
 kmc_model.print_statistics()
-kmc_model.backend = 'local_smart' #specifying is optional. local_smart is the dfault. Currently, the other options are 'lat_int' and 'otf'
 kmc_model.clear_model(model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model before exporting the new one. It is convenent to always include this line because then you don't need to 'confirm' removing the old model.
 kmc_model.save_model()
-kmcos.export(kmc_model.filename + ' -b ' + kmc_model.backend) #alternatively, one can use: kmcos.cli.main('export '+  kmc_model.filename + ' -b' + kmc_model.backend)
+kmcos.compile(kmc_model)

@@ -8,7 +8,7 @@ from kmcos.types import Action, Condition, Layer, Site, Species, create_kmc_mode
 model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
 model_name = model_name.replace("_complete__build", "")
 # Project
-kmc_model = create_kmc_model()
+kmc_model = create_kmc_model(model_name)
 kmc_model.set_meta(
     author='Michael Seibt',
     email='michael.seibt@tum.de',
@@ -137,11 +137,9 @@ kmc_model.add_process(
     tof_count={'current': -1}
 )
 
-# Build model
-file_name = kmc_model.meta.model_name + '.xml'
-kmc_model.save(file_name)
-if False:  # build the exported .xml directly
-    cli_main('export %s' % file_name)
+# Save the model to an xml file
+###It's good to simply copy and paste the below lines between model creation files.
 kmc_model.print_statistics()
-kmc_model.backend = 'local_smart'
-kmcos.export(file_name + ' b' + kmc_model.backend)
+kmc_model.clear_model(model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model before exporting the new one. It is convenent to always include this line because then you don't need to 'confirm' removing the old model.
+kmc_model.save_model()
+kmcos.compile(kmc_model)
