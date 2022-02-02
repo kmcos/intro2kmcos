@@ -639,31 +639,31 @@ subroutine put_O_fcc100_hol(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 0, 0, 0/)))
-    case(O)
-        call add_proc(O2_des_00, site + (/-1, 0, 0, 0/))
     case(CO)
         call add_proc(CO_oxi_00, site + (/-1, 0, 0, 0/))
+    case(O)
+        call add_proc(O2_des_00, site + (/-1, 0, 0, 0/))
     end select
 
     select case(get_species(site + (/0, -1, 0, 0/)))
-    case(O)
-        call add_proc(O2_des_01, site + (/0, -1, 0, 0/))
     case(CO)
         call add_proc(CO_oxi_01, site + (/0, -1, 0, 0/))
+    case(O)
+        call add_proc(O2_des_01, site + (/0, -1, 0, 0/))
     end select
 
     select case(get_species(site + (/1, 0, 0, 0/)))
-    case(O)
-        call add_proc(O2_des_00, site)
     case(CO)
         call add_proc(CO_oxi_02, site)
+    case(O)
+        call add_proc(O2_des_00, site)
     end select
 
     select case(get_species(site + (/0, 1, 0, 0/)))
-    case(O)
-        call add_proc(O2_des_01, site)
     case(CO)
         call add_proc(CO_oxi_03, site)
+    case(O)
+        call add_proc(O2_des_01, site)
     end select
 
 
@@ -769,21 +769,6 @@ subroutine touchup_fcc100_hol(site)
         call del_proc(O2_des_01, site)
     endif
     select case(get_species(site))
-    case(O)
-        select case(get_species(site + (/1, 0, 0, 0/)))
-        case(O)
-            call add_proc(O2_des_00, site)
-        case(CO)
-            call add_proc(CO_oxi_02, site)
-        end select
-
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(O)
-            call add_proc(O2_des_01, site)
-        case(CO)
-            call add_proc(CO_oxi_03, site)
-        end select
-
     case(CO)
         call add_proc(CO_des, site)
         select case(get_species(site + (/1, 0, 0, 0/)))
@@ -794,6 +779,21 @@ subroutine touchup_fcc100_hol(site)
         select case(get_species(site + (/0, 1, 0, 0/)))
         case(O)
             call add_proc(CO_oxi_01, site)
+        end select
+
+    case(O)
+        select case(get_species(site + (/1, 0, 0, 0/)))
+        case(CO)
+            call add_proc(CO_oxi_02, site)
+        case(O)
+            call add_proc(O2_des_00, site)
+        end select
+
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(CO)
+            call add_proc(CO_oxi_03, site)
+        case(O)
+            call add_proc(O2_des_01, site)
         end select
 
     case(empty)

@@ -14,7 +14,7 @@ model_name = __file__[+0:-3] # This is the python file name, the brackets cut of
 model_name = model_name.replace("__build", "")
 
 # Initialize the project
-kmc_model = create_kmc_model(model_name)
+kmc_model = kmcos.create_kmc_model(model_name)
 
 # Set projects metadata
 kmc_model.set_meta( author = 'Juan M. Lorenzi',
