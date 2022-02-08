@@ -5,7 +5,6 @@ Juan M. Lorenzi
 TU Munich
 June 2016
 """
-import os
 import kmcos
 # First kmcos.types
 from kmcos.types import *
@@ -108,9 +107,6 @@ for i, coord in enumerate([right, up, left, down]):
 ###It's good to simply copy and paste the below lines between model creation files.
 kmc_model.print_statistics()
 kmc_model.backend = 'local_smart' #specifying is optional. 'local_smart' is the default. Currently, the other options are 'lat_int' and 'otf'
-if (kmc_model.backend in os.listdir()):
-        kmc_model.clear_model(model_name=kmc_model.model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model files (including compiled files) before exporting the new one. It is convenient to always include this line because then you don't need to 'confirm' removing/overwriting the old model during the compile step.
-else:
-        pass
+kmc_model.clear_model(model_name=kmc_model.model_name, backend=kmc_model.backend) #This line is optional: if you are updating a model, this line will remove the old model files (including compiled files) before exporting the new one. It is convenient to always include this line because then you don't need to 'confirm' removing/overwriting the old model during the compile step.
 kmc_model.save_model()
 kmcos.compile(kmc_model)
