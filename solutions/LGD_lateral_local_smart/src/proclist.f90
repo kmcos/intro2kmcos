@@ -1153,12 +1153,44 @@ subroutine take_drain_simple_cubic_hollow(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 1, 0, 0/)))
+    case(source)
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(ion)
+            select case(get_species(site + (/0, 2, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_0_source, site)
+                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_1_source, site)
+                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
+                end select
+
+            case(ion)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_4_source, site)
+                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_5_source, site)
+                end select
+
+            end select
+
+        end select
+
     case(empty)
         select case(get_species(site + (/-1, 0, 0, 0/)))
         case(ion)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-2, 0, 0, 0/))
@@ -1168,14 +1200,13 @@ subroutine take_drain_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/-1, 0, 0, 0/))
@@ -1183,9 +1214,6 @@ subroutine take_drain_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -1229,6 +1257,9 @@ subroutine take_drain_simple_cubic_hollow(site)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_4, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_4, site + (/-2, 0, 0, 0/))
@@ -1236,20 +1267,17 @@ subroutine take_drain_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_6, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_6, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_5, site + (/-1, 0, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_right_7, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -1283,34 +1311,6 @@ subroutine take_drain_simple_cubic_hollow(site)
 
         end select
 
-    case(source)
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(ion)
-            select case(get_species(site + (/0, 2, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_0_source, site)
-                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_1_source, site)
-                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
-                end select
-
-            case(ion)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_4_source, site)
-                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_5_source, site)
-                end select
-
-            end select
-
-        end select
-
     end select
 
     select case(get_species(site + (/1, -1, 0, 0/)))
@@ -1320,6 +1320,10 @@ subroutine take_drain_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-1, -1, 0, 0/))
@@ -1329,14 +1333,13 @@ subroutine take_drain_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/0, -1, 0, 0/))
@@ -1344,9 +1347,6 @@ subroutine take_drain_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -1390,6 +1390,9 @@ subroutine take_drain_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_1, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_1, site + (/-1, -1, 0, 0/))
@@ -1397,20 +1400,17 @@ subroutine take_drain_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_3, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_top_5, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_3, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_top_3, site + (/0, -1, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_top_7, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -1893,6 +1893,54 @@ subroutine put_ion_simple_cubic_hollow(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 0, 0, 0/)))
+    case(source)
+        call add_proc(source_exit, site + (/-1, 0, 0, 0/))
+        select case(get_species(site + (/0, -1, 0, 0/)))
+        case(empty)
+            select case(get_species(site + (/0, 1, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/1, 0, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_0_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site)
+                    call add_proc(diffusion_top_0_source, site)
+                case(ion)
+                    call add_proc(diffusion_bottom_1_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_1_source, site)
+                end select
+
+            case(ion)
+                select case(get_species(site + (/1, 0, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_4_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_right_4_source, site)
+                case(ion)
+                    call add_proc(diffusion_bottom_5_source, site + (/0, -1, 0, 0/))
+                end select
+
+            end select
+
+        case(ion)
+            select case(get_species(site + (/1, 0, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/0, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_right_1_source, site)
+                    call add_proc(diffusion_top_2_source, site)
+                case(ion)
+                    call add_proc(diffusion_right_5_source, site)
+                end select
+
+            case(ion)
+                select case(get_species(site + (/0, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_top_3_source, site)
+                end select
+
+            end select
+
+        end select
+
     case(empty)
         select case(get_species(site + (/0, -1, 0, 0/)))
         case(empty)
@@ -1955,6 +2003,9 @@ subroutine put_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/-1, 1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_1_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_top_1_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_1, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_1, site + (/-2, 0, 0, 0/))
@@ -1962,26 +2013,29 @@ subroutine put_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_3, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_top_5, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_1_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_top_1_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_5_source, site + (/-1, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_5, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_5, site + (/-2, 0, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_bottom_7, site + (/-1, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_5_source, site + (/-1, -1, 0, 0/))
                 end select
 
             end select
 
         case(ion)
             select case(get_species(site + (/-2, 0, 0, 0/)))
+            case(source)
+                select case(get_species(site + (/-1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_top_3_source, site + (/-1, 0, 0, 0/))
+                end select
+
             case(empty)
                 select case(get_species(site + (/-1, 1, 0, 0/)))
                 case(empty)
@@ -1995,12 +2049,6 @@ subroutine put_ion_simple_cubic_hollow(site)
                 select case(get_species(site + (/-1, 1, 0, 0/)))
                 case(empty)
                     call add_proc(diffusion_top_7, site + (/-1, 0, 0, 0/))
-                end select
-
-            case(source)
-                select case(get_species(site + (/-1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_top_3_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -2053,54 +2101,6 @@ subroutine put_ion_simple_cubic_hollow(site)
 
         end select
 
-    case(source)
-        call add_proc(source_exit, site + (/-1, 0, 0, 0/))
-        select case(get_species(site + (/0, -1, 0, 0/)))
-        case(empty)
-            select case(get_species(site + (/0, 1, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/1, 0, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_0_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site)
-                    call add_proc(diffusion_top_0_source, site)
-                case(ion)
-                    call add_proc(diffusion_bottom_1_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_1_source, site)
-                end select
-
-            case(ion)
-                select case(get_species(site + (/1, 0, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_4_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_right_4_source, site)
-                case(ion)
-                    call add_proc(diffusion_bottom_5_source, site + (/0, -1, 0, 0/))
-                end select
-
-            end select
-
-        case(ion)
-            select case(get_species(site + (/1, 0, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/0, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_right_1_source, site)
-                    call add_proc(diffusion_top_2_source, site)
-                case(ion)
-                    call add_proc(diffusion_right_5_source, site)
-                end select
-
-            case(ion)
-                select case(get_species(site + (/0, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_top_3_source, site)
-                end select
-
-            end select
-
-        end select
-
     end select
 
     select case(get_species(site + (/1, -1, 0, 0/)))
@@ -2110,6 +2110,9 @@ subroutine put_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_4_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_right_4_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_4, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_4, site + (/-1, -1, 0, 0/))
@@ -2117,20 +2120,17 @@ subroutine put_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_6, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_right_6, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_4_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_right_4_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_5_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_6, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_5, site + (/0, -1, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_right_7, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_5_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -2170,13 +2170,13 @@ subroutine put_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_5_source, site + (/0, -2, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_5, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_5, site + (/-1, -1, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_bottom_7, site + (/0, -2, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_5_source, site + (/0, -2, 0, 0/))
                 end select
 
             case(ion)
@@ -2216,6 +2216,25 @@ subroutine put_ion_simple_cubic_hollow(site)
     select case(get_species(site + (/0, 1, 0, 0/)))
     case(ion)
         select case(get_species(site + (/-1, 1, 0, 0/)))
+        case(source)
+            select case(get_species(site + (/1, 1, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/0, 2, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_right_1_source, site + (/0, 1, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_right_5_source, site + (/0, 1, 0, 0/))
+                end select
+
+            case(ion)
+                select case(get_species(site + (/0, 2, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_top_3_source, site + (/0, 1, 0, 0/))
+                end select
+
+            end select
+
         case(empty)
             select case(get_species(site + (/0, 2, 0, 0/)))
             case(empty)
@@ -2255,25 +2274,6 @@ subroutine put_ion_simple_cubic_hollow(site)
                 select case(get_species(site + (/0, 2, 0, 0/)))
                 case(empty)
                     call add_proc(diffusion_top_7, site + (/0, 1, 0, 0/))
-                end select
-
-            end select
-
-        case(source)
-            select case(get_species(site + (/1, 1, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/0, 2, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_right_1_source, site + (/0, 1, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_right_5_source, site + (/0, 1, 0, 0/))
-                end select
-
-            case(ion)
-                select case(get_species(site + (/0, 2, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_top_3_source, site + (/0, 1, 0, 0/))
                 end select
 
             end select
@@ -2724,12 +2724,44 @@ subroutine take_ion_simple_cubic_hollow(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 1, 0, 0/)))
+    case(source)
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(ion)
+            select case(get_species(site + (/0, 2, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_0_source, site)
+                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_1_source, site)
+                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
+                end select
+
+            case(ion)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_4_source, site)
+                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_5_source, site)
+                end select
+
+            end select
+
+        end select
+
     case(empty)
         select case(get_species(site + (/-1, 0, 0, 0/)))
         case(ion)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-2, 0, 0, 0/))
@@ -2739,14 +2771,13 @@ subroutine take_ion_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/-1, 0, 0, 0/))
@@ -2754,9 +2785,6 @@ subroutine take_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -2800,6 +2828,9 @@ subroutine take_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_4, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_4, site + (/-2, 0, 0, 0/))
@@ -2807,20 +2838,17 @@ subroutine take_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_6, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_6, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_5, site + (/-1, 0, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_right_7, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -2854,34 +2882,6 @@ subroutine take_ion_simple_cubic_hollow(site)
 
         end select
 
-    case(source)
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(ion)
-            select case(get_species(site + (/0, 2, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_0_source, site)
-                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_1_source, site)
-                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
-                end select
-
-            case(ion)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_4_source, site)
-                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_5_source, site)
-                end select
-
-            end select
-
-        end select
-
     end select
 
     select case(get_species(site + (/1, -1, 0, 0/)))
@@ -2891,6 +2891,10 @@ subroutine take_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-1, -1, 0, 0/))
@@ -2900,14 +2904,13 @@ subroutine take_ion_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/0, -1, 0, 0/))
@@ -2915,9 +2918,6 @@ subroutine take_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -2961,6 +2961,9 @@ subroutine take_ion_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_1, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_1, site + (/-1, -1, 0, 0/))
@@ -2968,20 +2971,17 @@ subroutine take_ion_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_3, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_top_5, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_3, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_top_3, site + (/0, -1, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_top_7, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -3585,12 +3585,44 @@ subroutine take_source_simple_cubic_hollow(site)
 
     ! enable affected processes
     select case(get_species(site + (/-1, 1, 0, 0/)))
+    case(source)
+        select case(get_species(site + (/0, 1, 0, 0/)))
+        case(ion)
+            select case(get_species(site + (/0, 2, 0, 0/)))
+            case(empty)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_0_source, site)
+                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_1_source, site)
+                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
+                end select
+
+            case(ion)
+                select case(get_species(site + (/1, 1, 0, 0/)))
+                case(empty)
+                    call add_proc(diffusion_bottom_4_source, site)
+                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
+                case(ion)
+                    call add_proc(diffusion_bottom_5_source, site)
+                end select
+
+            end select
+
+        end select
+
     case(empty)
         select case(get_species(site + (/-1, 0, 0, 0/)))
         case(ion)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-2, 0, 0, 0/))
@@ -3600,14 +3632,13 @@ subroutine take_source_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/-1, 0, 0, 0/))
@@ -3615,9 +3646,6 @@ subroutine take_source_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/-1, 0, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/-1, 0, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -3661,6 +3689,9 @@ subroutine take_source_simple_cubic_hollow(site)
             select case(get_species(site + (/-1, -1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
+                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_4, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_left_4, site + (/-2, 0, 0, 0/))
@@ -3668,20 +3699,17 @@ subroutine take_source_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_6, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_6, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_4_source, site + (/-1, -1, 0, 0/))
-                    call add_proc(diffusion_right_4_source, site + (/-1, 0, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-2, 0, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_6, site + (/-2, 0, 0, 0/))
                     call add_proc(diffusion_right_5, site + (/-1, 0, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_right_7, site + (/-1, 0, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_5_source, site + (/-1, 0, 0, 0/))
                 end select
 
             end select
@@ -3715,34 +3743,6 @@ subroutine take_source_simple_cubic_hollow(site)
 
         end select
 
-    case(source)
-        select case(get_species(site + (/0, 1, 0, 0/)))
-        case(ion)
-            select case(get_species(site + (/0, 2, 0, 0/)))
-            case(empty)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_0_source, site)
-                    call add_proc(diffusion_right_0_source, site + (/0, 1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_1_source, site)
-                    call add_proc(diffusion_top_1_source, site + (/0, 1, 0, 0/))
-                end select
-
-            case(ion)
-                select case(get_species(site + (/1, 1, 0, 0/)))
-                case(empty)
-                    call add_proc(diffusion_bottom_4_source, site)
-                    call add_proc(diffusion_right_4_source, site + (/0, 1, 0, 0/))
-                case(ion)
-                    call add_proc(diffusion_bottom_5_source, site)
-                end select
-
-            end select
-
-        end select
-
     end select
 
     select case(get_species(site + (/1, -1, 0, 0/)))
@@ -3752,6 +3752,10 @@ subroutine take_source_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_0, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_0, site + (/-1, -1, 0, 0/))
@@ -3761,14 +3765,13 @@ subroutine take_source_simple_cubic_hollow(site)
                     call add_proc(diffusion_bottom_2, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_right_2, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_4, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_0_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_right_0_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_0_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
+                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_2, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_right_1, site + (/0, -1, 0, 0/))
@@ -3776,9 +3779,6 @@ subroutine take_source_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_right_3, site + (/0, -1, 0, 0/))
                     call add_proc(diffusion_top_6, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_right_1_source, site + (/0, -1, 0, 0/))
-                    call add_proc(diffusion_top_2_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -3822,6 +3822,9 @@ subroutine take_source_simple_cubic_hollow(site)
             select case(get_species(site + (/0, -2, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
+                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_bottom_1, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_left_1, site + (/-1, -1, 0, 0/))
@@ -3829,20 +3832,17 @@ subroutine take_source_simple_cubic_hollow(site)
                 case(ion)
                     call add_proc(diffusion_bottom_3, site + (/0, -2, 0, 0/))
                     call add_proc(diffusion_top_5, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_bottom_1_source, site + (/0, -2, 0, 0/))
-                    call add_proc(diffusion_top_1_source, site + (/0, -1, 0, 0/))
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, -1, 0, 0/)))
+                case(source)
+                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 case(empty)
                     call add_proc(diffusion_left_3, site + (/-1, -1, 0, 0/))
                     call add_proc(diffusion_top_3, site + (/0, -1, 0, 0/))
                 case(ion)
                     call add_proc(diffusion_top_7, site + (/0, -1, 0, 0/))
-                case(source)
-                    call add_proc(diffusion_top_3_source, site + (/0, -1, 0, 0/))
                 end select
 
             end select
@@ -4040,6 +4040,14 @@ subroutine touchup_simple_cubic_hollow(site)
         call del_proc(source_exit, site)
     endif
     select case(get_species(site))
+    case(source)
+        select case(get_species(site + (/1, 0, 0, 0/)))
+        case(empty)
+            call add_proc(source_entry, site)
+        case(ion)
+            call add_proc(source_exit, site)
+        end select
+
     case(empty)
         select case(get_species(site + (/1, 1, 0, 0/)))
         case(empty)
@@ -4048,22 +4056,22 @@ subroutine touchup_simple_cubic_hollow(site)
                 select case(get_species(site + (/0, 2, 0, 0/)))
                 case(empty)
                     select case(get_species(site + (/-1, 1, 0, 0/)))
+                    case(source)
+                        call add_proc(diffusion_bottom_0_source, site)
                     case(empty)
                         call add_proc(diffusion_bottom_0, site)
                     case(ion)
                         call add_proc(diffusion_bottom_2, site)
-                    case(source)
-                        call add_proc(diffusion_bottom_0_source, site)
                     end select
 
                 case(ion)
                     select case(get_species(site + (/-1, 1, 0, 0/)))
+                    case(source)
+                        call add_proc(diffusion_bottom_4_source, site)
                     case(empty)
                         call add_proc(diffusion_bottom_4, site)
                     case(ion)
                         call add_proc(diffusion_bottom_6, site)
-                    case(source)
-                        call add_proc(diffusion_bottom_4_source, site)
                     end select
 
                 end select
@@ -4099,22 +4107,22 @@ subroutine touchup_simple_cubic_hollow(site)
                 select case(get_species(site + (/0, 2, 0, 0/)))
                 case(empty)
                     select case(get_species(site + (/-1, 1, 0, 0/)))
+                    case(source)
+                        call add_proc(diffusion_bottom_1_source, site)
                     case(empty)
                         call add_proc(diffusion_bottom_1, site)
                     case(ion)
                         call add_proc(diffusion_bottom_3, site)
-                    case(source)
-                        call add_proc(diffusion_bottom_1_source, site)
                     end select
 
                 case(ion)
                     select case(get_species(site + (/-1, 1, 0, 0/)))
+                    case(source)
+                        call add_proc(diffusion_bottom_5_source, site)
                     case(empty)
                         call add_proc(diffusion_bottom_5, site)
                     case(ion)
                         call add_proc(diffusion_bottom_7, site)
-                    case(source)
-                        call add_proc(diffusion_bottom_5_source, site)
                     end select
 
                 end select
@@ -4153,10 +4161,22 @@ subroutine touchup_simple_cubic_hollow(site)
 
     case(ion)
         select case(get_species(site + (/1, 0, 0, 0/)))
+        case(drain)
+            call add_proc(drain_exit, site)
         case(empty)
             select case(get_species(site + (/0, 1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, 0, 0, 0/)))
+                case(source)
+                    select case(get_species(site + (/0, -1, 0, 0/)))
+                    case(empty)
+                        call add_proc(diffusion_right_0_source, site)
+                        call add_proc(diffusion_top_0_source, site)
+                    case(ion)
+                        call add_proc(diffusion_right_1_source, site)
+                        call add_proc(diffusion_top_2_source, site)
+                    end select
+
                 case(empty)
                     select case(get_species(site + (/0, -1, 0, 0/)))
                     case(empty)
@@ -4177,20 +4197,18 @@ subroutine touchup_simple_cubic_hollow(site)
                         call add_proc(diffusion_top_6, site)
                     end select
 
-                case(source)
-                    select case(get_species(site + (/0, -1, 0, 0/)))
-                    case(empty)
-                        call add_proc(diffusion_right_0_source, site)
-                        call add_proc(diffusion_top_0_source, site)
-                    case(ion)
-                        call add_proc(diffusion_right_1_source, site)
-                        call add_proc(diffusion_top_2_source, site)
-                    end select
-
                 end select
 
             case(ion)
                 select case(get_species(site + (/-1, 0, 0, 0/)))
+                case(source)
+                    select case(get_species(site + (/0, -1, 0, 0/)))
+                    case(empty)
+                        call add_proc(diffusion_right_4_source, site)
+                    case(ion)
+                        call add_proc(diffusion_right_5_source, site)
+                    end select
+
                 case(empty)
                     select case(get_species(site + (/0, -1, 0, 0/)))
                     case(empty)
@@ -4207,14 +4225,6 @@ subroutine touchup_simple_cubic_hollow(site)
                         call add_proc(diffusion_right_7, site)
                     end select
 
-                case(source)
-                    select case(get_species(site + (/0, -1, 0, 0/)))
-                    case(empty)
-                        call add_proc(diffusion_right_4_source, site)
-                    case(ion)
-                        call add_proc(diffusion_right_5_source, site)
-                    end select
-
                 end select
 
             end select
@@ -4223,6 +4233,14 @@ subroutine touchup_simple_cubic_hollow(site)
             select case(get_species(site + (/0, 1, 0, 0/)))
             case(empty)
                 select case(get_species(site + (/-1, 0, 0, 0/)))
+                case(source)
+                    select case(get_species(site + (/0, -1, 0, 0/)))
+                    case(empty)
+                        call add_proc(diffusion_top_1_source, site)
+                    case(ion)
+                        call add_proc(diffusion_top_3_source, site)
+                    end select
+
                 case(empty)
                     select case(get_species(site + (/0, -1, 0, 0/)))
                     case(empty)
@@ -4239,28 +4257,10 @@ subroutine touchup_simple_cubic_hollow(site)
                         call add_proc(diffusion_top_7, site)
                     end select
 
-                case(source)
-                    select case(get_species(site + (/0, -1, 0, 0/)))
-                    case(empty)
-                        call add_proc(diffusion_top_1_source, site)
-                    case(ion)
-                        call add_proc(diffusion_top_3_source, site)
-                    end select
-
                 end select
 
             end select
 
-        case(drain)
-            call add_proc(drain_exit, site)
-        end select
-
-    case(source)
-        select case(get_species(site + (/1, 0, 0, 0/)))
-        case(empty)
-            call add_proc(source_entry, site)
-        case(ion)
-            call add_proc(source_exit, site)
         end select
 
     end select
