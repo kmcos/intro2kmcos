@@ -19,7 +19,7 @@ kmc_model = kmcos.create_kmc_model(model_name)
 # Set projects metadata
 kmc_model.set_meta( author = 'Juan M. Lorenzi',
              email = 'jmlorenzi@gmail.com',
-             model_name = 'ZGB',
+             model_name = 'zgb_model',
              model_dimension = 2)
 
 # Define the lattice
