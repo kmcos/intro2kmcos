@@ -108,7 +108,7 @@ for i, coord in enumerate([right, up, left, down]):
 ###It's good to simply copy and paste the below lines between model creation files.
 kmc_model.print_statistics()
 kmc_model.backend = 'local_smart'
-#kmc_model.clear_model(model_name, backend=kmc_model.backend) 
+' '
 kmc_model.clear_model() #This line is optional: if you are updating a model, this line will remove the old model before exporting the new one. It is convenent to always include this line because then you don't need to 'confirm' removing the old model.
 kmc_model.save_model()
 kmcos.compile(kmc_model)
