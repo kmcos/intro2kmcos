@@ -4,7 +4,6 @@ from kmcos.run import KMC_Model
 import pylab
 import numpy as np
 import random
-from ase.gui.view import View
 
 #load model
 model = KMC_Model(print_rates=False, banner=False)
@@ -61,7 +60,7 @@ model._adjust_database()
 #check that lattice occupation is as expected
 model.print_coverages()
 atoms=model.get_atoms()
-view(atoms)
+model.show()
 
 #run and plot model as before...
 
@@ -72,10 +71,10 @@ tof_labels = model.get_tof_header().split(' ')
 cov_labels = model.get_occupation_header().split(' ')
 
 #Number of kmc steps taken in each sample
-sample_step = 1e5
+sample_step = 5e4
 
 #Number of samples
-N = 100
+N = 40
 
 #prepare arrays for TOFs, coverages and kmc steps
 tofs = np.zeros((N,len(tof_labels)))
@@ -120,6 +119,5 @@ ax2.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 ax2.legend(bbox_to_anchor=(1, 0.48), bbox_transform=pylab.gcf().transFigure)
 
 #save plot
-pylab.subplots_adjust(left=0.1, right=0.8, top=0.97)
+pylab.subplots_adjust(left=0.1, right=0.8, top=0.97, hspace=0.25)
 pylab.savefig('relaxation_random_initialization.pdf', dpi=300)
-
