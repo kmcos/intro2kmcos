@@ -48,7 +48,7 @@ ax2.plot(pCOs, Ocus, 'r-s', label='O@cus')
 # Set proper scales...
 ax1.set_xscale('log'); ax1.set_yscale('log'); ax2.set_xscale('log')
 # and labels
-ax1.set_ylabel('TOF [1/(s site)]');
+ax1.set_ylabel('TOF [events / (s site)]');
 ax2.set_xlabel('pCO [bar]'); ax2.set_ylabel('Coverage')
 
 plt.legend(loc='best') # render the legend
