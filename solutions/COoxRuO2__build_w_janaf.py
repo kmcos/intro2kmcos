@@ -10,8 +10,8 @@ model_name = model_name.replace("__build", "")
 kmc_model = kmcos.create_kmc_model(model_name)
 
 kmc_model.set_meta(author='Mie Andersen',
-            email='mie@phys.au.dk',
-            model_name=model_name,
+            email='mie.andersen@ch.tum.de',
+            model_name='CO_oxidation_Ruo2',
             model_dimension=2)
 
 # Species
@@ -55,13 +55,6 @@ kmc_model.add_parameter(name='T', value=450, adjustable=True, min=300, max=1500)
 
 kmc_model.add_parameter(name='A', value='%s*angstrom**2' % (kmc_model.lattice.cell[0,0]*
                                                       kmc_model.lattice.cell[1,1]))
-# Gas phase electronic contributions to the relative formation energies.
-# This naming "E_COgas" and "E_O2gas" is required for using the ase way of thermochemistry with kmcos.
-# For this specific model, the initial state is defined as being CO gas and O2 gas with a relative energy of 0.
-kmc_model.add_parameter(name='E_COgas', value='0.00')
-kmc_model.add_parameter(name='E_O2gas', value='0.00')
-
-# Adsorption energies and barriers
 kmc_model.add_parameter(name='E_O_bridge', value=-2.3)
 kmc_model.add_parameter(name='E_O_cus', value=-1.0)
 kmc_model.add_parameter(name='E_CO_bridge', value=-1.6)
@@ -102,7 +95,7 @@ kmc_model.add_process(name='CO_adsorption_cus',
 kmc_model.add_process(name='CO_desorption_cus',
                conditions=[Condition(species='CO', coord=cus)],
                actions=[Action(species='empty', coord=cus)],
-               rate_constant='p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-GibbsGas_COgas)*eV)')
+               rate_constant='p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-mu_COgas)*eV)')
 
 kmc_model.add_process(name='CO_adsorption_bridge',
                conditions=[Condition(species='empty', coord=bridge)],
@@ -111,7 +104,7 @@ kmc_model.add_process(name='CO_adsorption_bridge',
 kmc_model.add_process(name='CO_desorption_bridge',
                conditions=[Condition(species='CO', coord=bridge)],
                actions=[Action(species='empty', coord=bridge)],
-               rate_constant='p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-GibbsGas_COgas)*eV)')
+               rate_constant='p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-mu_COgas)*eV)')
 
 # CO diffusion
 
@@ -189,7 +182,7 @@ kmc_model.add_process(name='O2_desorption_cus_up',
                         Condition(species='O', coord=cus_up),],
                actions=[Condition(species='empty', coord=cus),
                         Condition(species='empty', coord=cus_up),],
-               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-GibbsGas_O2gas)*eV)')
+               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)')
 
 kmc_model.add_process(name='O2_adsorption_cus_right',
                conditions=[Condition(species='empty', coord=cus),
@@ -203,7 +196,7 @@ kmc_model.add_process(name='O2_desorption_cus_right',
                         Condition(species='O', coord=cus_right),],
                actions=[Condition(species='empty', coord=cus),
                         Condition(species='empty', coord=cus_right),],
-               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-GibbsGas_O2gas)*eV)')
+               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)')
 
 kmc_model.add_process(name='O2_adsorption_bridge_up',
                conditions=[Condition(species='empty', coord=bridge),
@@ -217,7 +210,7 @@ kmc_model.add_process(name='O2_desorption_bridge_up',
                         Condition(species='O', coord=bridge_up),],
                actions=[Condition(species='empty', coord=bridge),
                         Condition(species='empty', coord=bridge_up),],
-               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-GibbsGas_O2gas)*eV)')
+               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)')
 
 kmc_model.add_process(name='O2_adsorption_bridge_right',
                conditions=[Condition(species='empty', coord=bridge),
@@ -231,7 +224,7 @@ kmc_model.add_process(name='O2_desorption_bridge_right',
                         Condition(species='O', coord=bridge_right),],
                actions=[Condition(species='empty', coord=bridge),
                         Condition(species='empty', coord=bridge_right),],
-               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-GibbsGas_O2gas)*eV)')
+               rate_constant='p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)')
 
 
 # O diffusion

@@ -1,10 +1,5 @@
 """
 Use the ModelRunner to generate Arrhenius plot
-using kmos
-
-Mie Andersen
-TU Munich
-July 2017
 """
 
 #read the output and get T and TOF
@@ -30,6 +25,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 plt.plot([x['T_inv'] for x in sorted_results], np.log10([x['TOF'] for x in sorted_results]), '-o')
 plt.xlabel('1/T [1/K]')
-plt.ylabel('log(TOF) / events (sites s)^-1')
+plt.ylabel('log(TOF [events (sites s)^-1])')
 plt.savefig('arrhenius_ModelRunner.pdf') # Optionally, save plot
 plt.show()

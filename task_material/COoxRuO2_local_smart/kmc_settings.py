@@ -1,4 +1,4 @@
-model_name = 'CO_oxidation_Ruo2'
+model_name = 'COoxRuO2'
 simulation_size = 20
 random_seed = 1
 
@@ -22,6 +22,8 @@ parameters = {
     "E_COdiff_bridge_cus":{"value":"1.6", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
     "E_COdiff_cus_bridge":{"value":"1.3", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
     "E_COdiff_cus_cus":{"value":"1.7", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
+    "E_COgas":{"value":"0.00", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
+    "E_O2gas":{"value":"0.00", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
     "E_O_bridge":{"value":"-2.3", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
     "E_O_cus":{"value":"-1.0", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
     "E_Odiff_bridge_bridge":{"value":"0.7", "adjustable":False, "min":"0.0", "max":"0.0","scale":"linear"},
@@ -40,8 +42,8 @@ parameters = {
 rate_constants = {
     "CO_adsorption_bridge":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)", True),
     "CO_adsorption_cus":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)", True),
-    "CO_desorption_bridge":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-mu_COgas)*eV)", True),
-    "CO_desorption_cus":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-mu_COgas)*eV)", True),
+    "CO_desorption_bridge":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-GibbsGas_COgas)*eV)", True),
+    "CO_desorption_cus":("p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-GibbsGas_COgas)*eV)", True),
     "COdiff_bridge_down":("(beta*h)**(-1)*exp(-beta*(E_COdiff_bridge_bridge)*eV)", True),
     "COdiff_bridge_left":("(beta*h)**(-1)*exp(-beta*(E_COdiff_cus_bridge)*eV)", True),
     "COdiff_bridge_right":("(beta*h)**(-1)*exp(-beta*(E_COdiff_bridge_cus)*eV)", True),
@@ -54,10 +56,10 @@ rate_constants = {
     "O2_adsorption_bridge_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
     "O2_adsorption_cus_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
     "O2_adsorption_cus_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)", True),
-    "O2_desorption_bridge_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)", True),
-    "O2_desorption_bridge_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)", True),
-    "O2_desorption_cus_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)", True),
-    "O2_desorption_cus_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)", True),
+    "O2_desorption_bridge_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-GibbsGas_O2gas)*eV)", True),
+    "O2_desorption_bridge_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-GibbsGas_O2gas)*eV)", True),
+    "O2_desorption_cus_right":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-GibbsGas_O2gas)*eV)", True),
+    "O2_desorption_cus_up":("p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-GibbsGas_O2gas)*eV)", True),
     "Odiff_bridge_down":("(beta*h)**(-1)*exp(-beta*(E_Odiff_bridge_bridge)*eV)", True),
     "Odiff_bridge_left":("(beta*h)**(-1)*exp(-beta*(E_Odiff_cus_bridge)*eV)", True),
     "Odiff_bridge_right":("(beta*h)**(-1)*exp(-beta*(E_Odiff_bridge_cus)*eV)", True),
@@ -108,7 +110,7 @@ tof_count = {
 
 xml = """<?xml version="1.0" ?>
 <kmc version="(0, 3)">
-    <meta author="Mie Andersen" debug="0" email="mie.andersen@ch.tum.de" model_dimension="2" model_name="CO_oxidation_Ruo2"/>
+    <meta author="Mie Andersen" debug="0" email="mie@phys.au.dk" model_dimension="2" model_name="COoxRuO2"/>
     <species_list default_species="empty">
         <species color="#000000" name="CO" representation="Atoms('CC',[[0,0,0],[0,0,1.2]])" tags=""/>
         <species color="#ff0000" name="O" representation="Atoms('O')" tags=""/>
@@ -122,6 +124,8 @@ xml = """<?xml version="1.0" ?>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_COdiff_bridge_cus" scale="linear" value="1.6"/>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_COdiff_cus_bridge" scale="linear" value="1.3"/>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_COdiff_cus_cus" scale="linear" value="1.7"/>
+        <parameter adjustable="False" max="0.0" min="0.0" name="E_COgas" scale="linear" value="0.00"/>
+        <parameter adjustable="False" max="0.0" min="0.0" name="E_O2gas" scale="linear" value="0.00"/>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_O_bridge" scale="linear" value="-2.3"/>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_O_cus" scale="linear" value="-1.0"/>
         <parameter adjustable="False" max="0.0" min="0.0" name="E_Odiff_bridge_bridge" scale="linear" value="0.7"/>
@@ -155,11 +159,11 @@ xml = """<?xml version="1.0" ?>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="CO"/>
         </process>
-        <process enabled="True" name="CO_desorption_bridge" rate_constant="p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-mu_COgas)*eV)">
+        <process enabled="True" name="CO_desorption_bridge" rate_constant="p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_bridge-GibbsGas_COgas)*eV)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="CO"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
         </process>
-        <process enabled="True" name="CO_desorption_cus" rate_constant="p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-mu_COgas)*eV)">
+        <process enabled="True" name="CO_desorption_cus" rate_constant="p_COgas*bar*A/2/sqrt(2*pi*umass*m_CO/beta)*exp(beta*(E_CO_cus-GibbsGas_COgas)*eV)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="CO"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
         </process>
@@ -235,25 +239,25 @@ xml = """<?xml version="1.0" ?>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="O"/>
         </process>
-        <process enabled="True" name="O2_desorption_bridge_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_bridge_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_bridge+E_O_cus)-GibbsGas_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_bridge_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_bridge_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_bridge-GibbsGas_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="O"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="0 1 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_cus_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_cus_right" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*((E_O_cus+E_O_bridge)-GibbsGas_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
             <action coord_layer="ruo2" coord_name="bridge" coord_offset="1 0 0" species="empty"/>
         </process>
-        <process enabled="True" name="O2_desorption_cus_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-mu_O2gas)*eV)">
+        <process enabled="True" name="O2_desorption_cus_up" rate_constant="p_O2gas*bar*A/4./sqrt(2*pi*umass*m_O2/beta)*exp(beta*(2*E_O_cus-GibbsGas_O2gas)*eV)">
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="O"/>
             <condition coord_layer="ruo2" coord_name="cus" coord_offset="0 1 0" species="O"/>
             <action coord_layer="ruo2" coord_name="cus" coord_offset="0 0 0" species="empty"/>
@@ -360,6 +364,7 @@ xml = """<?xml version="1.0" ?>
 </kmc>
 """
 if __name__ == "__main__":
+    #benchmark if kmc_settings.py is run without additional arguments, else call cli with additional argument provided.
     import sys
     if len(sys.argv) == 1:
         from kmcos import cli

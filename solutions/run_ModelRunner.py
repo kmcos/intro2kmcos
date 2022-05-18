@@ -1,10 +1,5 @@
 """
-Use the ModelRunner to generate Arrhenius plot
-using kmcos
-
-Mie Andersen
-TU Munich
-July 2017
+Use the ModelRunner to generate an Arrhenius plot
 """
 
 from kmcos.run import ModelRunner, PressureParameter, TemperatureParameter

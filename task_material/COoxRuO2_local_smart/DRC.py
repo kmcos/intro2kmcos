@@ -4,14 +4,13 @@ from kmcos.run import KMC_Model
 import pylab
 import numpy as np
 import random
-from ase.gui.view import View
 
 #load model
 model = KMC_Model(print_rates=False, banner=False)
 
 #set pressures and temperature
 model.parameters.T = 600
-model.parameters.p_COgas = 1
+model.parameters.p_COgas = 10
 model.parameters.p_O2gas = 1
 
 #prepare random initial state of O-poisoned lattice (known steady-state solution)
@@ -22,7 +21,7 @@ Nsite_types = model.lattice.spuck
 cov_labels = model.get_occupation_header().split(' ')[:-Nsite_types]
 
 #define guess coverages
-guess_coverages = [0.05, 0.05, 0.95, 0.95] #CO_br, CO_cus, O_br, O_cus
+guess_coverages = [0.95, 0.95, 0.05, 0.05] #CO_br, CO_cus, O_br, O_cus
 
 #dictionaries for converting to kmos variables
 kmos_species = {'CO':model.proclist.co, 'O':model.proclist.o}
@@ -61,7 +60,7 @@ model._adjust_database()
 #check that lattice occupation is as expected
 #model.print_coverages()
 #atoms=model.get_atoms()
-#view(atoms)
+#model.show()
 
 #get DRC for CO adsorption on cus site
 process = "CO_adsorption_cus"
@@ -77,7 +76,7 @@ sample_steps = 1e7
 
 #relax model
 model.do_steps(relax_steps)
-atoms = model.get_atoms(geometry=False)
+#model.print_coverages()
 
 #get rate constant
 k = float(model.rate_constants(process).split('=')[1][1:-8])
@@ -94,12 +93,10 @@ model.rate_constants.set("CO_adsorption_cus", k_fin)
 data = model.get_std_sampled_data(samples=1,sample_size=sample_steps,tof_method="integ")
 tof_fin = float(data.split(' ')[3])
 
-delta_TOF = tof_fin - tof_ini
+delta_tof = tof_fin - tof_ini
 delta_k = k_fin - k_ini
-DRC = (k_ini / tof_ini) * (delta_TOF / delta_k)
+DRC = (k_ini / tof_ini) * (delta_tof / delta_k)
 
 print('delta: ',delta)
 print('sample_steps: ',sample_steps)
 print('DRC: ',DRC)
-
-

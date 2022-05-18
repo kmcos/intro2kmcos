@@ -1,5 +1,5 @@
 """
-Generate and Arrhenius plot
+Generate an Arrhenius plot
 using kmcos
 
 Juan M. Lorenzi
@@ -33,7 +33,8 @@ logTOFs = [math.log(TOF,10.) for TOF in TOFs]
 # and plot
 import matplotlib.pyplot as plt
 plt.plot(invTs, logTOFs, '-o')
+plt.title('Arrhenius plot')
 plt.xlabel('1/T [1/K]')
-plt.ylabel('log(TOF) / events (sites s)^-1')
+plt.ylabel('log(TOF [events (sites s)^-1])')
 plt.savefig('arrhenius.pdf') # Optionally, save plot
 plt.show()

@@ -1,6 +1,6 @@
 """
-Generate and Arrhenius plot
-using kmos
+Generate an Arrhenius plot
+using kmcos + save to / reload from file
 
 Juan M. Lorenzi
 TU Munich
@@ -35,7 +35,8 @@ iT = 0; iTOF = 3 # columns for each variable
 import matplotlib.pyplot as plt
 # numpy arrays can be transformed much more easily
 plt.plot(1/data[:,iT], np.log10(data[:,iTOF]), '-o')
+plt.title('Arrhenius plot')
 plt.xlabel('1/T [1/K]')
-plt.ylabel('log(TOF) / events (sites s)^-1')
-# plt.savefig('arrhenius.pdf') # Optionally, save plot
+plt.ylabel('log(TOF [events (sites s)^-1])')
+plt.savefig('arrhenius.pdf') # Optionally, save plot
 plt.show()
