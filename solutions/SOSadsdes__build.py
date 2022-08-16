@@ -16,7 +16,7 @@ from kmcos.types import *
 import itertools
 
 def main():
-    model_name = __file__[+0:-3] # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
+    model_name = str( os.path.basename(__file__)[+0:-3]) # This is the python file name, the brackets cut off zero characters from the beginning and three character from the end (".py").  To manually name the model just place a string here.
     model_name = model_name.replace("__build", "")
     kmc_model = kmcos.create_kmc_model(model_name)
 
