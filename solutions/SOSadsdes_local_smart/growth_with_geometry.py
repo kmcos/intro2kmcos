@@ -11,6 +11,7 @@ targetML = 4
 
 nsteps = 100
 
+
 for i,T in enumerate(Ts):
     random_seed = random.random()*1e12
     model = KMC_Model(banner=False,
@@ -30,6 +31,7 @@ for i,T in enumerate(Ts):
         at = model.get_atoms(geometry=False)
         # Convert TOF into ML growth
         ML += at.tof_data[model.tofs.index('Growth')]*at.delta_t*size[2]
+    at = model.get_atoms(geometry=True)
     outname = '_'.join(['config', 'T{}'.format(T)] +
                        ['{}'.format(d) for d in model.size])
     model.dump_config(outname)
@@ -37,5 +39,21 @@ for i,T in enumerate(Ts):
     print(('Deposited {}ML in {} s'.format(
         ML,
         model.base.get_kmc_time())))
+    file_name='run_with_{}_{}'.format(T,kads)
+    print(file_name)
+    at.write(f"{file_name}.in",format="aims")
+    cell=["lattice_vector      {}      0.00000000      0.00000000\n".format(size[0]*model.lattice.unit_cell_size),
+          "lattice_vector      0.00000000     {}      0.00000000\n".format(size[1]*model.lattice.unit_cell_size,
+          "lattice_vector      0.00000000      0.00000000     {}\n".format(size[2]*model.lattice.unit_cell_size]
+    with open(f"{file_name}.in", "r") as f:
+        contents = f.readlines()
+
+    contents.insert(5, cell[2])
+    contents.insert(5, cell[1])
+    contents.insert(5, cell[0])
+
+    with open(f"{file_name}.in", "w") as f:
+        contents = "".join(contents)
+        f.write(contents)
     model.deallocate()
 
